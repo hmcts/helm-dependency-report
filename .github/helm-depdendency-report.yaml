@@ -1,0 +1,33 @@
+name: Generate report on helm depdendencies
+on: workflow_dispatch
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get github token
+        uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.EK_GITHUB_CLI_ID }}
+          private_key: ${{ secrets.EK_GITHUB_CLI_KEY }}
+
+      - name: Setup Script
+        run: |
+          chmod +x get-all-renovate-prs-helm.sh
+          
+      - name: Run script
+        run: ./get-all-renovate-prs-helm.sh
+        working-directory: ./
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          CONTACT_CHANNEL: ${{ secrets.CONTACT_CHANNEL }}
