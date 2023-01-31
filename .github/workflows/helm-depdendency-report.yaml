@@ -1,4 +1,4 @@
-name: Generate report on helm depdendencies
+name: Generate report on helm dependencies
 on: workflow_dispatch
 
 jobs:
