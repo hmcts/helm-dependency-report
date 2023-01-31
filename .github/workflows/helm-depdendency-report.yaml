@@ -16,8 +16,8 @@ jobs:
         uses: tibdex/github-app-token@v1
         id: generate-token
         with:
-          app_id: ${{ secrets.EK_GITHUB_CLI_ID }}
-          private_key: ${{ secrets.EK_GITHUB_CLI_KEY }}
+          app_id: ${{ secrets.HMCTS_GITHUB_CLI_APP_ID }}
+          private_key: ${{ secrets.HMCTS_GITHUB_CLI_PRIVATE_KEY }}
 
       - name: Setup Script
         run: |
@@ -30,4 +30,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          CONTACT_CHANNEL: ${{ secrets.CONTACT_CHANNEL }}
