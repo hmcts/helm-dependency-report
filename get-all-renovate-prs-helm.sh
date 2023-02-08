@@ -70,8 +70,12 @@ for repo in $(echo "${repos[@]}"); do
     # extract slack contact channel from file
     contact_channel=$(curl -s https://raw.githubusercontent.com/hmcts/cnp-jenkins-config/master/team-config.yml | yq $(echo $slackChannel | tr -d '"'))
 
-    if [[ "$repo" = *sds-toffee* || "$repo" = *cnp-plum* ]]; then
+    if [[ "$repo" = *sds-toffee* || "$repo" = *cnp-plum* || "$repo" = *chart-* ]]; then
         contact_channel="#platops-help"
+    fi
+
+    if [[ "$repo" = *sptribs* ]]; then
+        contact_channel="*special-tribunals-dev-channel*"
     fi
 
     message_data="{\"channel\": \"#dependencies-helm\",\"blocks\": [{\"type\": \"section\",\"text\": {\"type\": \"mrkdwn\",\"text\": \"*Helm dependencies are out of date - <https://github.com/hmcts/$repo|$repo>*\"}},{\"type\": \"section\",\"text\": {\"type\": \"mrkdwn\",\"text\": \"The following updates are pending in $repo:\n\n$updates\"}},{\"type\": \"section\",\"text\": {\"type\": \"mrkdwn\",\"text\": \"You can contact the team that owns this repo via the *$contact_channel* channel on slack.\"}},{\"type\": \"section\",\"text\": {\"type\": \"mrkdwn\",\"text\": \"These are needed to keep your app up to date so please review the pull requests at your earliest convenience.\"}},{\"type\": \"actions\",\"elements\": [{\"type\": \"button\",\"text\": {\"type\": \"plain_text\",\"text\": \"Click here to view all PRs\",\"emoji\": true},\"url\": \"https://github.com/hmcts/$repo/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc+author%3Aapp%2Frenovate+Helm+in%3Atitle\"}]}]}"
