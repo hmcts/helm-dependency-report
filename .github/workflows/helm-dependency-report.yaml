@@ -1,5 +1,8 @@
 name: Generate report on helm dependencies
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 9 * * 1'
 
 jobs:
   report:
